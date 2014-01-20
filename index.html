@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <title>Map</title>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.1/leaflet.js"></script>
+        <link href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.1/leaflet.css" rel="stylesheet" type="text/css"/>
+        <style>* { margin: 0; padding: 0; }</style>
+    </head>
+    <body>
+        <div id="map" style="height: 100%; width: 100%;"></div>
+        <script type="text/javascript">
+            var map = L.map('map').setView([47, 2], 6);
+            L.tileLayer('http://a.tiles.mapbox.com/v3/examples.map-vyofok3q/{z}/{x}/{y}.png', {
+                attribution: '<a href="http://openstreetmap.org">OpenStreetMap</a> &mdash; <a href="http://mapbox.com">MapBox</a>',
+                maxZoom: 18
+            }).addTo(map);
+
+            $.ajax({
+                dataType: 'json',
+                url: 'geoloc.php',
+                success: function(data) {
+                    $.each(data, function(address, geoloc) {
+                        var marker = L.marker([geoloc.lat, geoloc.lng]);
+                        marker.bindPopup(address);
+                        marker.addTo(map);
+                    });
+                }
+            });
+        </script>
+    </body>
+</html>
